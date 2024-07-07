@@ -1,0 +1,29 @@
+.info{
+    padding-block: 30px;
+    background-color: var(--accent-blue-green);
+}
+
+.info__box{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.flow{
+    display: flex;
+    gap: 20px;
+}
+.group{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.info__text{
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 120%;
+    color: var(--white);
+    position: relative;
+}
