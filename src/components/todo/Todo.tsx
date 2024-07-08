@@ -8,7 +8,6 @@ import styles from "./style.module.css";
 type Difficulty = "easy" | "medium" | "hard";
 interface TodoProps {
   text: string;
-  level: number;
   difficulty: Difficulty;
   completed: boolean;
   tag: string;
@@ -25,20 +24,12 @@ const Todo = () => {
       ...todos,
       {
         text: newTodo,
-        level: 0,
         difficulty: "easy",
         tag: "",
         completed: false,
       },
     ]);
     setNewTodo("");
-  };
-
-  const incrementLevel = (index: number) => {
-    const updatedTodos = todos.map((todo, i) =>
-      i === index ? { ...todo, level: todo.level + 1 } : todo
-    );
-    setTodos(updatedTodos);
   };
 
   const changeDifficulty = (index: number, newDifficulty: Difficulty) => {
@@ -75,6 +66,7 @@ const Todo = () => {
 
   return (
     <section>
+      <h2 className={styles.title}>Todos Tasks</h2>
       <div className={styles.todo__box}>
         <Box
           className={styles.form}
@@ -97,11 +89,9 @@ const Todo = () => {
             <TodoItem
               key={index}
               text={todo.text}
-              level={todo.level}
               difficulty={todo.difficulty}
               completed={todo.completed}
               tag={todo.tag}
-              onIncrement={() => incrementLevel(index)}
               onChangeDifficulty={(newDifficulty) =>
                 changeDifficulty(index, newDifficulty)
               }

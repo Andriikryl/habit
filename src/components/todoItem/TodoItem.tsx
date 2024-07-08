@@ -3,18 +3,16 @@ import { ButtonComponent } from "../button/Button";
 import { SelectComponent } from "../selectComponent/SelectComponent";
 import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
-import { Fab, FormControlLabel } from "@mui/material";
+import { FormControlLabel } from "@mui/material";
 import styles from "./style.module.css";
 import clsx from "clsx";
 
 type Difficulty = "easy" | "medium" | "hard";
 interface TodoItemProps {
   text: string;
-  level: number;
   difficulty: Difficulty;
   completed: boolean;
   tag: string;
-  onIncrement: () => void;
   onChangeDifficulty: (newDifficulty: Difficulty) => void;
   onToggleCompleted: () => void;
   onChangeTag: (newTag: string) => void;
@@ -24,11 +22,9 @@ interface TodoItemProps {
 
 const TodoItem: React.FC<TodoItemProps> = ({
   text,
-  level,
   difficulty,
   completed,
   tag,
-  onIncrement,
   onChangeDifficulty,
   onToggleCompleted,
   onChangeTag,
@@ -42,17 +38,6 @@ const TodoItem: React.FC<TodoItemProps> = ({
     >
       <div className={styles.flow}>
         <h3 className={styles.item__title}>{text}</h3>
-        <div className={styles.level__group}>
-          <span className={styles.level}>{level}</span>
-          <Fab
-            size="small"
-            color="primary"
-            aria-label="add"
-            onClick={onIncrement}
-          >
-            +
-          </Fab>
-        </div>
       </div>
       <SelectComponent
         label="Difficulty"
