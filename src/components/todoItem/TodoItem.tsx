@@ -11,9 +11,9 @@ type Difficulty = "easy" | "medium" | "hard";
 interface TodoItemProps {
   text: string;
   difficulty: Difficulty;
-  completed: boolean;
   tag: string;
   onChangeDifficulty: (newDifficulty: Difficulty) => void;
+  completed: boolean;
   onToggleCompleted: () => void;
   onChangeTag: (newTag: string) => void;
   onDelete: () => void;
@@ -24,9 +24,9 @@ const TodoItem: React.FC<TodoItemProps> = ({
   text,
   difficulty,
   completed,
+  onToggleCompleted,
   tag,
   onChangeDifficulty,
-  onToggleCompleted,
   onChangeTag,
   onDelete,
   difficultyOptions,

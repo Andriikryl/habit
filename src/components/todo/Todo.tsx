@@ -85,16 +85,16 @@ const Todo = () => {
           <ButtonComponent type="submit">add</ButtonComponent>
         </Box>
         <ul role="list" className={styles.list}>
-          {todos.map((todo, index) => (
+          {todos.map((todo, index: number) => (
             <TodoItem
               key={index}
               text={todo.text}
               difficulty={todo.difficulty}
-              completed={todo.completed}
               tag={todo.tag}
               onChangeDifficulty={(newDifficulty) =>
                 changeDifficulty(index, newDifficulty)
               }
+              completed={todo.completed}
               onToggleCompleted={() => toggleCompleted(index)}
               onChangeTag={(newTag) => changeTag(index, newTag)}
               onDelete={() => deleteTodo(index)}
