@@ -6,46 +6,41 @@ import styles from "./style.module.css";
 import { HabitsTaskItem } from "../habitsTaskItem/HabitsTaskItem";
 import { useRecoilState } from "recoil";
 import {
-  addHabit,
-  changeDifficulty,
-  changeTag,
-  deleteTodo,
+  addTask,
+  changeTaskProperty,
+  deleteTask,
   habitListState,
-  incrementLevel,
+  incrementTaskLevel,
 } from "@/store/store";
 
 type Difficulty = "easy" | "medium" | "hard";
-interface HabitProps {
-  text: string;
-  level: number;
-  difficulty: Difficulty;
-  tag: string;
-}
 
 const HabitsTasks = () => {
   const [newHabit, setNewHabit] = useState("");
-  const [habits, setTodos] = useRecoilState<HabitProps[]>(habitListState);
+  const [habits, setHabits] = useRecoilState(habitListState);
 
-  const handelAddHabit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleAddHabit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const updatedHabits = addHabit(habits, newHabit);
-    setTodos(updatedHabits);
+    setHabits(
+      addTask(habits, { text: newHabit, level: 0, difficulty: "easy", tag: "" })
+    );
     setNewHabit("");
   };
+
   const hndelIncrementLevel = (index: number) => {
-    setTodos(incrementLevel(habits, index));
+    setHabits(incrementTaskLevel(habits, index));
   };
 
   const handelChangeDifficulty = (index: number, newDifficulty: Difficulty) => {
-    setTodos(changeDifficulty(habits, index, newDifficulty));
+    setHabits(changeTaskProperty(habits, index, "difficulty", newDifficulty));
   };
 
   const handelChangeTag = (index: number, newTag: string) => {
-    setTodos(changeTag(habits, index, newTag));
+    setHabits(changeTaskProperty(habits, index, "tag", newTag));
   };
 
   const handelDeleteTodo = (index: number) => {
-    setTodos(deleteTodo(habits, index));
+    setHabits(deleteTask(habits, index));
   };
 
   const difficultyOptions: { value: Difficulty; label: string }[] = [
@@ -63,7 +58,7 @@ const HabitsTasks = () => {
           component="form"
           noValidate
           autoComplete="off"
-          onSubmit={handelAddHabit}
+          onSubmit={handleAddHabit}
         >
           <TextField
             value={newHabit}

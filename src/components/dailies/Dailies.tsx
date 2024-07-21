@@ -6,34 +6,28 @@ import { Box, TextField } from "@mui/material";
 import styles from "./style.module.css";
 import { DailiesItem } from "../dailiesItem/DailiesItem";
 import {
+  addTask,
   dailiesListState,
-  addDailies,
-  deleteDaily,
-  toggleCompleted,
+  deleteTask,
+  toggleCompletedTask,
 } from "../../store/store";
-
-interface DailiesProps {
-  text: string;
-  completed: boolean;
-}
 
 const Dailies = () => {
   const [newDaily, setNewDaily] = useState("");
-  const [dailies, setDailies] =
-    useRecoilState<DailiesProps[]>(dailiesListState);
+  const [dailies, setDailies] = useRecoilState(dailiesListState);
 
   const handleAddDailies = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setDailies(addDailies(dailies, newDaily));
+    setDailies(addTask(dailies, { text: newDaily, completed: false }));
     setNewDaily("");
   };
 
   const handleDeleteDaily = (index: number) => {
-    setDailies(deleteDaily(dailies, index));
+    setDailies(deleteTask(dailies, index));
   };
 
   const handleToggleCompleted = (index: number) => {
-    setDailies(toggleCompleted(dailies, index));
+    setDailies(toggleCompletedTask(dailies, index));
   };
 
   return (

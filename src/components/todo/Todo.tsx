@@ -4,53 +4,36 @@ import { ButtonComponent } from "../button/Button";
 import { TodoItem } from "../todoItem/TodoItem";
 import { Box, TextField } from "@mui/material";
 import styles from "./style.module.css";
+import { useRecoilState } from "recoil";
+import {
+  addTask,
+  changeTaskProperty,
+  todoListState,
+  toggleCompletedTask,
+} from "@/store/store";
 
 type Difficulty = "easy" | "medium" | "hard";
-interface TodoProps {
-  text: string;
-  difficulty: Difficulty;
-  completed: boolean;
-  tag: string;
-}
 
 const Todo = () => {
   const [newTodo, setNewTodo] = useState("");
-  const [todos, setTodos] = useState<TodoProps[]>([]);
+  const [todos, setTodos] = useRecoilState(todoListState);
 
-  const addTodo = (event: React.FormEvent<HTMLFormElement>) => {
+  const handelAddTodo = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (newTodo === "") return;
-    setTodos([
-      ...todos,
-      {
-        text: newTodo,
-        difficulty: "easy",
-        tag: "",
-        completed: false,
-      },
-    ]);
+    setTodos(addTask(todos, { text: newTodo, difficulty: "easy", tag: "" }));
     setNewTodo("");
   };
 
-  const changeDifficulty = (index: number, newDifficulty: Difficulty) => {
-    const updatedTodos = todos.map((todo, i) =>
-      i === index ? { ...todo, difficulty: newDifficulty } : todo
-    );
-    setTodos(updatedTodos);
+  const handelChangeDifficulty = (index: number, newDifficulty: Difficulty) => {
+    setTodos(changeTaskProperty(todos, index, "difficulty", newDifficulty));
   };
 
-  const toggleCompleted = (index: number) => {
-    const updatedTodos = todos.map((todo, i) =>
-      i === index ? { ...todo, completed: !todo.completed } : todo
-    );
-    setTodos(updatedTodos);
+  const handelToggleCompleted = (index: number) => {
+    setTodos(toggleCompletedTask(todos, index));
   };
 
-  const changeTag = (index: number, newTag: string) => {
-    const updatedTodos = todos.map((todo, i) =>
-      i === index ? { ...todo, tag: newTag } : todo
-    );
-    setTodos(updatedTodos);
+  const handelchangeTag = (index: number, newTag: string) => {
+    setTodos(changeTaskProperty(todos, index, "tag", newTag));
   };
 
   const deleteTodo = (index: number) => {
@@ -73,7 +56,7 @@ const Todo = () => {
           component="form"
           noValidate
           autoComplete="off"
-          onSubmit={addTodo}
+          onSubmit={handelAddTodo}
         >
           <TextField
             value={newTodo}
@@ -92,11 +75,11 @@ const Todo = () => {
               difficulty={todo.difficulty}
               tag={todo.tag}
               onChangeDifficulty={(newDifficulty) =>
-                changeDifficulty(index, newDifficulty)
+                handelChangeDifficulty(index, newDifficulty)
               }
               completed={todo.completed}
-              onToggleCompleted={() => toggleCompleted(index)}
-              onChangeTag={(newTag) => changeTag(index, newTag)}
+              onToggleCompleted={() => handelToggleCompleted(index)}
+              onChangeTag={(newTag) => handelchangeTag(index, newTag)}
               onDelete={() => deleteTodo(index)}
               difficultyOptions={difficultyOptions}
             />

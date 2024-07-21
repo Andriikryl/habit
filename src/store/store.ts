@@ -1,16 +1,23 @@
-import { atom, selector } from "recoil";
+import { atom } from "recoil";
 
 type Difficulty = "easy" | "medium" | "hard";
 
-interface DailiesProps {
+interface TaskProps {
   text: string;
-  completed: boolean;
-}
-interface HabitListProps {
-  text: string;
-  level: number;
   difficulty: Difficulty;
   tag: string;
+}
+
+interface DailiesProps extends TaskProps {
+  completed: boolean;
+}
+
+interface HabitListProps extends TaskProps {
+  level: number;
+}
+
+interface TodoProps extends TaskProps {
+  completed: boolean;
 }
 
 const dailiesListState = atom<DailiesProps[]>({
@@ -21,67 +28,52 @@ const dailiesListState = atom<DailiesProps[]>({
 const habitListState = atom<HabitListProps[]>({
   key: "habitListState",
   default: [],
-})
+});
 
-// Function to add a daily
-const addDailies = (dailies: DailiesProps[], newDaily: string) => {
-  if (newDaily === "") return dailies;
+const todoListState = atom<TodoProps[]>({
+  key: "todoListState",
+  default: [],
+});
+
+const addTask = <T extends TaskProps>(tasks: T[], newTask: Partial<T> & Pick<T, 'text'>): T[] => {
+  if (newTask.text === "") return tasks;
   return [
-    ...dailies,
+    ...tasks,
     {
-      text: newDaily,
-      completed: false,
+      ...newTask,
     },
-  ];
+  ] as T[];
 };
 
-const addHabit = (habits: HabitListProps[], newHabit: string): HabitListProps[] => {
-  if (newHabit === "") return habits;  // Return the existing array if newHabit is empty
-  return [
-    ...habits,
-    {
-      text: newHabit,
-      level: 0,
-      difficulty: "easy",
-      tag: "",
-    },
-  ];
+const deleteTask = <T>(tasks: T[], index: number): T[] => {
+  return tasks.filter((_, i) => i !== index);
 };
 
-
-// Function to delete a daily
-const deleteDaily = (dailies: DailiesProps[], index: number) => {
-  return dailies.filter((_, i) => i !== index);
-};
-
-// Function to toggle the completion state of a daily
-const toggleCompleted = (dailies: DailiesProps[], index: number) => {
-  return dailies.map((daily, i) =>
-    i === index ? { ...daily, completed: !daily.completed } : daily
+const toggleCompletedTask = <T extends { completed: boolean }>(tasks: T[], index: number): T[] => {
+  return tasks.map((task, i) =>
+    i === index ? { ...task, completed: !task.completed } : task
   );
 };
 
-const incrementLevel = (habits: HabitListProps[], index: number): HabitListProps[] => {
-  return   habits.map((todo, i) =>
-    i === index ? { ...todo, level: todo.level + 1 } : todo
+const incrementTaskLevel = (tasks: HabitListProps[], index: number): HabitListProps[] => {
+  return tasks.map((task, i) =>
+    i === index ? { ...task, level: task.level + 1 } : task
   );
 };
 
-const changeDifficulty = (habits: HabitListProps[], index: number, newDifficulty: Difficulty): HabitListProps[] => {
-  return  habits.map((todo, i) =>
-    i === index ? { ...todo, difficulty: newDifficulty } : todo
+const changeTaskProperty = <T, K extends keyof T>(tasks: T[], index: number, key: K, value: T[K]): T[] => {
+  return tasks.map((task, i) =>
+    i === index ? { ...task, [key]: value } : task
   );
 };
 
-const changeTag = (habits: HabitListProps[], index: number, newTag: string): HabitListProps[] => {
-  return habits.map((todo, i) =>
-    i === index ? { ...todo, tag: newTag } : todo
-  );
+export {
+  dailiesListState,
+  habitListState,
+  todoListState,
+  addTask,
+  deleteTask,
+  toggleCompletedTask,
+  incrementTaskLevel,
+  changeTaskProperty,
 };
-
-const deleteTodo = (habits: HabitListProps[], index: number,): HabitListProps[] => {
-  return habits.filter((_, i) => i !== index);
-};
-
-
-export { dailiesListState,habitListState,  addDailies, deleteDaily, toggleCompleted, addHabit, incrementLevel, changeDifficulty, changeTag, deleteTodo };
