@@ -4,6 +4,15 @@ import { ButtonComponent } from "../button/Button";
 import { Box, TextField } from "@mui/material";
 import styles from "./style.module.css";
 import { HabitsTaskItem } from "../habitsTaskItem/HabitsTaskItem";
+import { useRecoilState } from "recoil";
+import {
+  addHabit,
+  changeDifficulty,
+  changeTag,
+  deleteTodo,
+  habitListState,
+  incrementLevel,
+} from "@/store/store";
 
 type Difficulty = "easy" | "medium" | "hard";
 interface HabitProps {
@@ -15,47 +24,28 @@ interface HabitProps {
 
 const HabitsTasks = () => {
   const [newHabit, setNewHabit] = useState("");
-  const [habits, setTodos] = useState<HabitProps[]>([]);
+  const [habits, setTodos] = useRecoilState<HabitProps[]>(habitListState);
 
-  const addHabit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handelAddHabit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (newHabit === "") return;
-    setTodos([
-      ...habits,
-      {
-        text: newHabit,
-        level: 0,
-        difficulty: "easy",
-        tag: "",
-      },
-    ]);
+    const updatedHabits = addHabit(habits, newHabit);
+    setTodos(updatedHabits);
     setNewHabit("");
   };
-
-  const incrementLevel = (index: number) => {
-    const updatedTodos = habits.map((todo, i) =>
-      i === index ? { ...todo, level: todo.level + 1 } : todo
-    );
-    setTodos(updatedTodos);
+  const hndelIncrementLevel = (index: number) => {
+    setTodos(incrementLevel(habits, index));
   };
 
-  const changeDifficulty = (index: number, newDifficulty: Difficulty) => {
-    const updatedTodos = habits.map((todo, i) =>
-      i === index ? { ...todo, difficulty: newDifficulty } : todo
-    );
-    setTodos(updatedTodos);
+  const handelChangeDifficulty = (index: number, newDifficulty: Difficulty) => {
+    setTodos(changeDifficulty(habits, index, newDifficulty));
   };
 
-  const changeTag = (index: number, newTag: string) => {
-    const updatedTodos = habits.map((todo, i) =>
-      i === index ? { ...todo, tag: newTag } : todo
-    );
-    setTodos(updatedTodos);
+  const handelChangeTag = (index: number, newTag: string) => {
+    setTodos(changeTag(habits, index, newTag));
   };
 
-  const deleteTodo = (index: number) => {
-    const updatedTodos = habits.filter((_, i) => i !== index);
-    setTodos(updatedTodos);
+  const handelDeleteTodo = (index: number) => {
+    setTodos(deleteTodo(habits, index));
   };
 
   const difficultyOptions: { value: Difficulty; label: string }[] = [
@@ -73,7 +63,7 @@ const HabitsTasks = () => {
           component="form"
           noValidate
           autoComplete="off"
-          onSubmit={addHabit}
+          onSubmit={handelAddHabit}
         >
           <TextField
             value={newHabit}
@@ -92,12 +82,12 @@ const HabitsTasks = () => {
               level={todo.level}
               difficulty={todo.difficulty}
               tag={todo.tag}
-              onIncrement={() => incrementLevel(index)}
+              onIncrement={() => hndelIncrementLevel(index)}
               onChangeDifficulty={(newDifficulty) =>
-                changeDifficulty(index, newDifficulty)
+                handelChangeDifficulty(index, newDifficulty)
               }
-              onChangeTag={(newTag) => changeTag(index, newTag)}
-              onDelete={() => deleteTodo(index)}
+              onChangeTag={(newTag) => handelChangeTag(index, newTag)}
+              onDelete={() => handelDeleteTodo(index)}
               difficultyOptions={difficultyOptions}
             />
           ))}
