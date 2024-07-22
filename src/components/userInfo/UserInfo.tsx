@@ -1,15 +1,11 @@
 "use client";
-import { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import LinearProgress from "@mui/material/LinearProgress";
 import styles from "./style.module.css";
+import { useRecoilState } from "recoil";
+import { userInfo } from "@/store/store";
 const UserInfo = () => {
-  const [info, setInfo] = useState({
-    name: "John Doe",
-    level: 0,
-    health: 60,
-    experience: 20,
-  });
+  const [info, setInfo] = useRecoilState(userInfo);
   return (
     <section className={styles.info}>
       <div className={styles.flow}>

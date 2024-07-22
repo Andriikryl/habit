@@ -35,6 +35,16 @@ const todoListState = atom<TodoProps[]>({
   default: [],
 });
 
+const userInfo = atom ({
+  key: "userInfo",
+  default: {
+    name: "John Doe",
+    level: 0,
+    health: 60,
+    experience: 20,
+  },
+});
+
 const addTask = <T extends TaskProps>(tasks: T[], newTask: Partial<T> & Pick<T, 'text'>): T[] => {
   if (newTask.text === "") return tasks;
   return [
@@ -76,4 +86,5 @@ export {
   toggleCompletedTask,
   incrementTaskLevel,
   changeTaskProperty,
+  userInfo
 };
