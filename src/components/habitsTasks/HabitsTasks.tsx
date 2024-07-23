@@ -12,6 +12,7 @@ import {
   habitListState,
   incrementTaskLevel,
 } from "@/store/store";
+import { SpotlightWrapper } from "../spotlightWrapper/SpotlightWrapper";
 
 type Difficulty = "easy" | "medium" | "hard";
 
@@ -52,42 +53,45 @@ const HabitsTasks = () => {
   return (
     <section>
       <h2 className={styles.title}>Habits Tasks</h2>
-      <div className={styles.todo__box}>
-        <Box
-          className={styles.form}
-          component="form"
-          noValidate
-          autoComplete="off"
-          onSubmit={handleAddHabit}
-        >
-          <TextField
-            value={newHabit}
-            onChange={(e) => setNewHabit(e.target.value)}
-            id="outlined-basic"
-            label="add habit"
-            variant="outlined"
-          />
-          <ButtonComponent type="submit">add</ButtonComponent>
-        </Box>
-        <ul role="list" className={styles.list}>
-          {habits.map((todo, index) => (
-            <HabitsTaskItem
-              key={index}
-              text={todo.text}
-              level={todo.level}
-              difficulty={todo.difficulty}
-              tag={todo.tag}
-              onIncrement={() => hndelIncrementLevel(index)}
-              onChangeDifficulty={(newDifficulty) =>
-                handelChangeDifficulty(index, newDifficulty)
-              }
-              onChangeTag={(newTag) => handelChangeTag(index, newTag)}
-              onDelete={() => handelDeleteTodo(index)}
-              difficultyOptions={difficultyOptions}
+      <SpotlightWrapper>
+        <div className={styles.todo__box}>
+          <Box
+            className={styles.form}
+            component="form"
+            noValidate
+            autoComplete="off"
+            onSubmit={handleAddHabit}
+          >
+            <TextField
+              value={newHabit}
+              onChange={(e) => setNewHabit(e.target.value)}
+              id="outlined-basic"
+              label="add habit"
+              variant="outlined"
             />
-          ))}
-        </ul>
-      </div>
+            <ButtonComponent type="submit">add</ButtonComponent>
+          </Box>
+
+          <ul role="list" className={styles.list}>
+            {habits.map((todo, index) => (
+              <HabitsTaskItem
+                key={index}
+                text={todo.text}
+                level={todo.level}
+                difficulty={todo.difficulty}
+                tag={todo.tag}
+                onIncrement={() => hndelIncrementLevel(index)}
+                onChangeDifficulty={(newDifficulty) =>
+                  handelChangeDifficulty(index, newDifficulty)
+                }
+                onChangeTag={(newTag) => handelChangeTag(index, newTag)}
+                onDelete={() => handelDeleteTodo(index)}
+                difficultyOptions={difficultyOptions}
+              />
+            ))}
+          </ul>
+        </div>
+      </SpotlightWrapper>
     </section>
   );
 };

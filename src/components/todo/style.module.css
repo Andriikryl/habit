@@ -15,8 +15,9 @@
     margin-block-end: 10px;
 }
 .form{
-    width: max-content;
+    width: 100%;
     padding: 10px;
+    background-color: var(--white);
     border-radius: 10px;
     box-shadow: 0 1px 1px rgba(0,0,0,0.15), 
     0 2px 2px rgba(0,0,0,0.15), 
