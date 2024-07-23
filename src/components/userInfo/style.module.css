@@ -1,6 +1,7 @@
 .info{
     padding-block: 30px;
-    background-color: var(--accent-blue-green);
+    background-color: #000000;
+    border-bottom: 2px solid #fca311;
 }
 
 .info__box{
