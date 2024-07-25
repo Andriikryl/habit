@@ -167,3 +167,14 @@ textarea:not([rows]) {
  .nav{
   min-width: 300px;
  }
+
+ .home__flow{
+  margin-block-start: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+ }
+
+ /* *{
+  outline: 1px solid tomato !important;
+ } */
