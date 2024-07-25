@@ -1,4 +1,4 @@
-import { atom } from "recoil";
+import { atom, selector } from "recoil";
 
 type Difficulty = "easy" | "medium" | "hard";
 
@@ -35,7 +35,7 @@ const todoListState = atom<TodoProps[]>({
   default: [],
 });
 
-const userInfo = atom ({
+const userInfo = atom({
   key: "userInfo",
   default: {
     name: "John Doe",
@@ -77,6 +77,61 @@ const changeTaskProperty = <T, K extends keyof T>(tasks: T[], index: number, key
   );
 };
 
+// Separate selectors for each list
+const TodoStatsState = selector({
+  key: 'TodoListStats',
+  get: ({ get }) => {
+    const todoList = get(todoListState);
+    const totalNum = todoList.length;
+    const totalCompletedNum = todoList.filter((item) => item.completed).length;
+    const totalUncompletedNum = totalNum - totalCompletedNum;
+    const percentCompleted = totalNum === 0 ? 0 : totalCompletedNum / totalNum * 100;
+
+    return {
+      totalNum,
+      totalCompletedNum,
+      totalUncompletedNum,
+      percentCompleted,
+    };
+  },
+});
+
+const DailiesStatsState = selector({
+  key: 'DailiesListStats',
+  get: ({ get }) => {
+    const dailiesList = get(dailiesListState);
+    const totalNum = dailiesList.length;
+    const totalCompletedNum = dailiesList.filter((item) => item.completed).length;
+    const totalUncompletedNum = totalNum - totalCompletedNum;
+    const percentCompleted = totalNum === 0 ? 0 : totalCompletedNum / totalNum * 100;
+
+    return {
+      totalNum,
+      totalCompletedNum,
+      totalUncompletedNum,
+      percentCompleted,
+    };
+  },
+});
+
+const HabitStatsState = selector({
+  key: 'HabitListStats',
+  get: ({ get }) => {
+    const habitList = get(habitListState);
+    const totalNum = habitList.length;
+    const totalCompletedNum = habitList.filter((item) => item.level > 0).length;
+    const totalUncompletedNum = totalNum - totalCompletedNum;
+    const percentCompleted = totalNum === 0 ? 0 : totalCompletedNum / totalNum * 100;
+
+    return {
+      totalNum,
+      totalCompletedNum,
+      totalUncompletedNum,
+      percentCompleted,
+    };
+  },
+});
+
 export {
   dailiesListState,
   habitListState,
@@ -86,5 +141,8 @@ export {
   toggleCompletedTask,
   incrementTaskLevel,
   changeTaskProperty,
-  userInfo
+  userInfo,
+  TodoStatsState,
+  DailiesStatsState,
+  HabitStatsState,
 };
