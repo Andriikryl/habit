@@ -1,0 +1,13 @@
+.wrapper{
+    flex-basis: 300px;
+    flex-grow: 1;
+    border: 1px solid #fca311;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.flow{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
